@@ -52,18 +52,21 @@ else ()
     set (EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/debug/")
 endif ()
 
-string(LENGTH ${PROJECT_SOURCE_DIR} PREFIX_LEN) 
+string(LENGTH ${PROJECT_SOURCE_DIR} PREFIX_LEN)
 MATH(EXPR PREFIX_LEN "${PREFIX_LEN}+1")
-foreach(F ${PROJ_HDR_FILES}) 
+foreach(F ${PROJ_HDR_FILES})
   GET_FILENAME_COMPONENT(FP ${F} PATH)
   string(SUBSTRING ${FP} ${PREFIX_LEN} -1 FS)
   #message(${PREFIX_LEN} ":" ${FS})
   install(FILES "${F}" DESTINATION ${FS})
 endforeach(F)
 
-install(TARGETS NonMetricSpaceLib   
+include(GNUInstallDirs)
+install(TARGETS NonMetricSpaceLib
+  EXPORT NonMetricSpaceLibConfig
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   COMPONENT library
 )
-
+install(EXPORT NonMetricSpaceLibConfig DESTINATION ${CMAKE_INSTALL_DATADIR}/NonMetricSpaceLib/cmake)
+export(TARGETS NonMetricSpaceLib FILE NonMetricSpaceLibConfig.cmake)
